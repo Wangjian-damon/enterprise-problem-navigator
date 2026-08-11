@@ -1,0 +1,18 @@
+{
+  "name": "@epn/api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "EPN API 服务（P2c 轻量实现：原生 node http；P4 换 NestJS）",
+  "main": "dist/server.js",
+  "types": "dist/server.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "node dist/server.js",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@epn/core": "workspace:*",
+    "@epn/connector-git": "workspace:*",
+    "@epn/pack-fin-rd": "workspace:*"
+  }
+}

@@ -15,6 +15,18 @@ importers:
         specifier: ^5.5.0
         version: 5.9.3
 
+  apps/api:
+    dependencies:
+      '@epn/connector-git':
+        specifier: workspace:*
+        version: link:../../connectors/git
+      '@epn/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@epn/pack-fin-rd':
+        specifier: workspace:*
+        version: link:../../packs/fin-rd
+
   connectors/git:
     dependencies:
       '@epn/connector-sdk':

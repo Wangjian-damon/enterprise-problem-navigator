@@ -3,114 +3,84 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Enterprise Problem Navigator · Synthetic Sandbox</title>
+<title>Enterprise Problem Navigator · Interactive Demo</title>
 <style>
   :root {
     --blue-900: #042C53; --blue-800: #0C447C; --blue-600: #185FA5; --blue-100: #B5D4F4; --blue-50: #E6F1FB;
     --teal-800: #085041; --teal-600: #0F6E56; --teal-100: #9FE1CB; --teal-50: #E1F5EE;
     --amber-800: #633806; --amber-600: #854F0B; --amber-100: #FAC775; --amber-50: #FAEEDA;
     --gray-900: #2C2C2A; --gray-600: #5F5E5A; --gray-200: #D3D1C7; --gray-50: #F1EFE8;
-    --red-600: #A32D2D; --red-50: #FCEBEB;
     --border: rgba(15, 110, 86, 0.15);
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif;
-    background: #F7F9F8; color: var(--gray-900); line-height: 1.55;
-  }
+  body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", sans-serif; background: #F7F9F8; color: var(--gray-900); line-height: 1.55; }
   .wrap { max-width: 1180px; margin: 0 auto; padding: 28px 36px 40px; }
 
-  /* ── Header ── */
   .header { display: flex; align-items: center; justify-content: space-between; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
   .brand { display: flex; align-items: center; gap: 14px; }
-  .logo {
-    width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--blue-600), var(--teal-600));
-    display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; font-weight: 600; letter-spacing: 0.5px;
-  }
-  .brand h1 { font-size: 19px; font-weight: 600; color: var(--blue-900); letter-spacing: 0.3px; }
+  .logo { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--blue-600), var(--teal-600)); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; font-weight: 600; }
+  .brand h1 { font-size: 19px; font-weight: 600; color: var(--blue-900); }
   .brand .sub { font-size: 12.5px; color: var(--gray-600); margin-top: 2px; }
-  .badge {
-    display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px;
-    background: var(--amber-50); border: 1px solid var(--amber-100); color: var(--amber-800);
-    font-size: 12px; font-weight: 500; letter-spacing: 0.5px;
-  }
+  .badge { display: inline-flex; align-items: center; gap: 6px; padding: 6px 14px; border-radius: 999px; background: var(--amber-50); border: 1px solid var(--amber-100); color: var(--amber-800); font-size: 12px; font-weight: 500; }
   .badge::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--amber-600); }
+  .badge.live { background: var(--teal-50); border-color: var(--teal-100); color: var(--teal-800); }
+  .badge.live::before { background: var(--teal-600); }
 
-  /* ── Main ── */
-  .main { display: grid; grid-template-columns: 320px 1fr; gap: 24px; margin-top: 24px; align-items: start; }
-
-  /* Left: questions */
+  .main { display: grid; grid-template-columns: 340px 1fr; gap: 24px; margin-top: 24px; align-items: start; }
   .panel { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 20px; }
-  .panel h2 { font-size: 13px; font-weight: 600; color: var(--gray-600); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 14px; }
-  .q {
-    display: flex; gap: 12px; padding: 14px 14px; border: 1.5px solid transparent; border-radius: 12px; cursor: pointer;
-    transition: all .15s ease; margin-bottom: 10px; background: var(--gray-50);
-  }
+  .panel h2 { font-size: 13px; font-weight: 600; color: var(--gray-600); letter-spacing: 1px; margin-bottom: 14px; }
+
+  .input-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .input-row input { flex: 1; padding: 10px 12px; border: 1.5px solid var(--gray-200); border-radius: 10px; font-size: 13.5px; font-family: inherit; outline: none; }
+  .input-row input:focus { border-color: var(--blue-600); }
+  .input-row button { padding: 10px 16px; border: none; border-radius: 10px; background: var(--blue-600); color: #fff; font-size: 13.5px; font-weight: 500; cursor: pointer; }
+  .input-row button:hover { background: var(--blue-800); }
+  .input-row button:disabled { opacity: .5; cursor: wait; }
+
+  .q { display: flex; gap: 12px; padding: 13px 14px; border: 1.5px solid transparent; border-radius: 12px; cursor: pointer; transition: all .15s ease; margin-bottom: 10px; background: var(--gray-50); }
   .q:hover { background: var(--blue-50); }
   .q.active { background: var(--blue-50); border-color: var(--blue-600); }
-  .q .num {
-    width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    font-size: 12.5px; font-weight: 600; color: #fff; background: var(--teal-600);
-  }
+  .q .num { width: 26px; height: 26px; border-radius: 8px; flex-shrink: 0; display: flex; align-items: center; justify-content: center; font-size: 12.5px; font-weight: 600; color: #fff; background: var(--teal-600); }
   .q.active .num { background: var(--blue-600); }
-  .q .qt { font-size: 13.5px; font-weight: 500; color: var(--gray-900); line-height: 1.45; }
+  .q .qt { font-size: 13.5px; font-weight: 500; line-height: 1.45; }
   .q .ql { font-size: 12px; color: var(--gray-600); margin-top: 3px; }
   .hint { font-size: 11.5px; color: var(--gray-600); margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--gray-200); }
 
-  /* Right: result */
   .result-panel { background: #fff; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; }
-  .result-head {
-    padding: 18px 24px; background: linear-gradient(135deg, var(--blue-900), var(--blue-800)); color: #fff;
-  }
+  .result-head { padding: 18px 24px; background: linear-gradient(135deg, var(--blue-900), var(--blue-800)); color: #fff; }
   .result-head .tag { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; opacity: .75; }
-  .result-head .input { font-size: 17px; font-weight: 600; margin-top: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+  .result-head .input { font-size: 16px; font-weight: 600; margin-top: 6px; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
   .result-body { padding: 24px; }
 
-  .section-label { font-size: 12px; font-weight: 600; color: var(--gray-600); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .section-label { font-size: 12px; font-weight: 600; color: var(--gray-600); letter-spacing: 1px; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
   .section-label::after { content: ""; flex: 1; height: 1px; background: var(--gray-200); }
 
-  /* Chain */
-  .chain { display: flex; align-items: stretch; gap: 0; flex-wrap: wrap; }
-  .hop { flex: 1; min-width: 120px; border: 1.5px solid var(--gray-200); border-radius: 12px; padding: 12px 10px 10px; text-align: center; background: #fff; position: relative; }
-  .hop .h-name { font-size: 13.5px; font-weight: 600; color: var(--gray-900); }
-  .hop .h-role { font-size: 11px; color: var(--gray-600); margin-top: 2px; }
-  .hop .h-evidence { margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--gray-200); font-size: 11px; color: var(--gray-600); text-align: left; line-height: 1.5; }
-  .hop .h-evidence b { font-weight: 600; }
-  .hop.ev-s4 { background: var(--teal-50); border-color: var(--teal-100); }
-  .hop.ev-s4 .h-name { color: var(--teal-800); }
-  .hop.ev-s3 { background: var(--blue-50); border-color: var(--blue-100); }
-  .hop.ev-s3 .h-name { color: var(--blue-800); }
-  .hop.ev-s2 { background: var(--amber-50); border-color: var(--amber-100); }
-  .hop.ev-s2 .h-name { color: var(--amber-800); }
-  .hop.ev-s1 { background: var(--gray-50); }
-  .arrow { display: flex; align-items: center; padding: 0 6px; color: var(--gray-600); font-size: 18px; }
-  .chain-foot { width: 100%; margin-top: 14px; font-size: 12.5px; color: var(--gray-600); background: var(--gray-50); border-radius: 10px; padding: 10px 14px; }
+  .entity-grid { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .chip { padding: 6px 12px; border-radius: 8px; font-size: 12px; border: 1px solid var(--gray-200); background: var(--gray-50); }
+  .chip b { color: var(--blue-800); }
+  .chip .t { color: var(--gray-600); margin-left: 6px; font-size: 11px; }
 
-  /* Confidence legend */
+  .order { list-style: none; margin-bottom: 8px; }
+  .order li { display: flex; gap: 12px; padding: 9px 0; border-bottom: 1px solid var(--gray-50); font-size: 13.5px; }
+  .order .n { width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center; background: var(--teal-600); color: #fff; font-size: 12px; font-weight: 600; }
+
+  .evidence-list { margin-top: 8px; }
+  .ev { display: flex; gap: 10px; padding: 8px 10px; border-radius: 8px; margin-bottom: 6px; font-size: 12.5px; background: var(--gray-50); align-items: flex-start; }
+  .ev .lv { flex-shrink: 0; padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 600; }
+  .lv.s4 { background: var(--teal-50); color: var(--teal-800); }
+  .lv.s3 { background: var(--blue-50); color: var(--blue-800); }
+  .lv.s2 { background: var(--amber-50); color: var(--amber-800); }
+  .lv.s1 { background: var(--gray-50); color: var(--gray-600); }
+  .ev .scope { color: var(--blue-600); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 11.5px; }
+  .ev .detail { color: var(--gray-600); }
+
   .legend { display: flex; gap: 16px; flex-wrap: wrap; margin-top: 8px; }
   .lg { display: flex; align-items: center; gap: 7px; font-size: 12px; color: var(--gray-600); }
   .lg .dot { width: 12px; height: 12px; border-radius: 4px; }
   .dot.s4 { background: var(--teal-600); } .dot.s3 { background: var(--blue-600); } .dot.s2 { background: var(--amber-600); } .dot.s1 { background: var(--gray-200); }
 
-  /* Steps */
-  .steps { list-style: none; }
-  .steps li { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid var(--gray-50); font-size: 13.5px; }
-  .steps li:last-child { border-bottom: none; }
-  .steps .n {
-    width: 24px; height: 24px; border-radius: 50%; flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-    background: var(--teal-600); color: #fff; font-size: 12px; font-weight: 600;
-  }
-  .steps .reason { font-size: 12px; color: var(--gray-600); margin-top: 2px; }
-
-  /* Graph (Q3) */
-  .graph { display: flex; align-items: center; gap: 0; flex-wrap: wrap; }
-  .repo { flex: 1; min-width: 150px; border: 1.5px solid var(--gray-200); border-radius: 12px; padding: 12px; background: #fff; }
-  .repo .r-name { font-size: 13px; font-weight: 600; color: var(--gray-900); font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
-  .repo .r-ver { font-size: 11px; color: var(--gray-600); margin-top: 2px; }
-  .repo .r-mod { font-size: 11.5px; color: var(--gray-600); margin-top: 6px; }
-  .repo.impact { background: var(--red-50); border-color: var(--red-600); }
-  .repo.impact .r-name { color: var(--red-600); }
-  .repo.impact .r-mod { color: var(--red-600); font-weight: 500; }
+  .loading { text-align: center; padding: 40px 0; color: var(--gray-600); font-size: 14px; }
+  .error { background: #FCEBEB; border: 1px solid #F09595; color: #A32D2D; padding: 12px 16px; border-radius: 10px; font-size: 13px; }
 
   .foot { margin-top: 28px; padding-top: 16px; border-top: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; font-size: 12px; color: var(--gray-600); }
   .foot .quote { font-size: 13px; font-weight: 500; color: var(--teal-800); }
@@ -127,37 +97,24 @@
         <div class="sub">企业内部问题诊断导航系统 · Diagnostic Navigation, not a Knowledge Base</div>
       </div>
     </div>
-    <span class="badge">SYNTHETIC SANDBOX · 合成演示数据</span>
+    <span class="badge" id="modeBadge">检测后端中…</span>
   </div>
 
   <div class="main">
     <div class="panel">
       <h2>Describe a problem · 描述问题</h2>
-      <div class="q active" data-q="q1">
-        <div class="num">1</div>
-        <div>
-          <div class="qt">授信接口持续返回 500</div>
-          <div class="ql">"Credit API keeps returning 500"</div>
-        </div>
+      <div class="input-row">
+        <input id="qInput" type="text" placeholder="例：授信接口持续返回 500，先查什么？" />
+        <button id="qBtn" onclick="ask()">导航</button>
       </div>
-      <div class="q" data-q="q2">
-        <div class="num">2</div>
-        <div>
-          <div class="qt">新配置未在全部实例生效</div>
-          <div class="ql">"New config not taking effect across all instances"</div>
-        </div>
-      </div>
-      <div class="q" data-q="q3">
-        <div class="num">3</div>
-        <div>
-          <div class="qt">升级后跨仓库依赖断裂</div>
-          <div class="ql">"Cross-repo dependency breaking after upgrade"</div>
-        </div>
-      </div>
-      <div class="hint">点击问题查看导航结果。所有数据为合成演示数据，不含任何真实系统信息。</div>
+      <div id="presets"></div>
+      <div class="hint">后端已连接时为真实推理（连接器抽取 → 知识图谱 → 规则编排）；未连接时展示合成演示数据。</div>
     </div>
 
-    <div class="result-panel" id="result"></div>
+    <div class="result-panel" id="result">
+      <div class="result-head"><div class="tag">Navigation Result</div><div class="input">等待输入问题…</div></div>
+      <div class="result-body"><div class="loading">在上方输入一个问题，或点击左侧示例。</div></div>
+    </div>
   </div>
 
   <div class="foot">
@@ -167,111 +124,128 @@
 </div>
 
 <script>
-const DATA = {
-  q1: {
-    input: '"Credit API keeps returning 500"',
-    tag: 'Navigation Result · 授信接口故障',
-    chain: [
-      { name: 'Gateway', role: 'api-gateway', ev: 's4', text: '<b>S4 源码</b> · 接口日志 10:23:11 超时 5s' },
-      { name: 'Credit Service', role: 'credit-svc', ev: 's4', text: '<b>S4 源码</b> · 异常传播 credit-3002' },
-      { name: 'Order DB', role: 'orders-db', ev: 's3', text: '<b>S3 配置</b> · 慢查询 1.2s（阈值 300ms）' },
-      { name: 'Loan Config', role: 'config-center', ev: 's3', text: '<b>S3 配置</b> · 开关 loan_retry=false' },
-      { name: 'Cache', role: 'redis-cache', ev: 's2', text: '<b>S2 推算</b> · 缓存命中率较基线 ↓' },
-    ],
-    foot: '建议排查顺序：① Order DB 慢查询 → ② Loan Config 开关 → ③ Cache 命中率 → ④ 网关超时设置',
-    steps: [
-      { t: 'Order DB 慢查询（1.2s > 阈值 300ms）', r: 'S3 配置证据：连接池与索引配置近 7 天有变更' },
-      { t: 'Loan Config 开关 loan_retry=false', r: 'S3 配置证据：开关于 2026-08-06 修改，影响重试路径' },
-      { t: 'Cache 命中率下降', r: 'S2 推算：基于近 1 小时命中率趋势' },
-      { t: '网关超时设置 5s', r: 'S4 源码证据：网关配置文件中 timeout 定义' },
-    ],
-  },
-  q2: {
-    input: '"New config not taking effect across all instances"',
-    tag: 'Navigation Result · 配置变更排查',
-    chain: [
-      { name: 'Config Center', role: 'scope: prod', ev: 's3', text: '<b>S3 配置</b> · 作用域 env=prod，未覆盖灰度组' },
-      { name: 'Publish Workflow', role: 'status: draft', ev: 's3', text: '<b>S3 配置</b> · 变更单状态为 draft，未发布' },
-      { name: 'Instance Group', role: '5 实例', ev: 's4', text: '<b>S4 源码</b> · 3/5 实例已拉取新配置' },
-      { name: 'Health Check', role: 'status: ok', ev: 's2', text: '<b>S2 推算</b> · 实例健康，排除故障注入' },
-    ],
-    foot: '建议排查顺序：① 配置作用域（prod？） → ② 发布状态（published?） → ③ 实例健康 → ④ 客户端缓存',
-    steps: [
-      { t: '核对配置作用域是否覆盖目标实例组', r: 'S3 配置证据：当前作用域 env=prod，灰度组未纳入' },
-      { t: '检查变更单发布状态', r: 'S3 配置证据：状态为 draft，尚未执行发布动作' },
-      { t: '逐实例核对配置拉取情况', r: 'S4 源码证据：3/5 实例已生效，2 个实例拉取时间滞后' },
-      { t: '排除客户端本地缓存', r: 'S2 推算：同版本客户端缓存策略一致' },
-    ],
-  },
-  q3: {
-    input: '"Cross-repo dependency breaking after upgrade"',
-    tag: 'Navigation Result · 跨仓库依赖断裂',
-    graph: true,
-    repos: [
-      { name: 'order-sdk', ver: 'v2.1.0 (upgraded)', mod: '依赖方 · 升级触发', impact: false },
-      { name: 'payment-api', ver: 'v2.1.0 required', mod: '/checkout 受影响', impact: true },
-      { name: 'loan-gateway', ver: 'v2.1.0 required', mod: '/apply 受影响', impact: true },
-    ],
-    foot: '建议回滚顺序：① payment-api 回滚依赖声明 v2.1.0→v2.0.3 → ② loan-gateway 回滚依赖声明 → ③ 重跑集成测试',
-    steps: [
-      { t: '回滚 payment-api 依赖声明至 v2.0.3', r: '受影响模块 /checkout，接口签名变更（S4 源码）' },
-      { t: '回滚 loan-gateway 依赖声明', r: '受影响模块 /apply，编译期依赖 order-sdk（S4 源码）' },
-      { t: '重跑跨仓集成测试套件', r: '覆盖 3 仓库依赖链路（S2 推算）' },
-      { t: '验证后再评估升级', r: '建立升级回归清单，避免同类断裂（建议项）' },
-    ],
-  },
-};
+const API = 'http://localhost:8091/api';
+const PRESETS = [
+  { q: '小程序提交后一直 loading，怎么排查？', label: 'S1 提交一直 loading' },
+  { q: '授信接口持续返回 500，先查什么？', label: 'G1 授信接口 500' },
+  { q: '错误码 E1002 在哪里定义和返回？', label: 'S4 错误码追踪' },
+  { q: '配置 loan_retry 关闭后影响哪些页面和服务？', label: 'S7 配置影响' },
+  { q: '升级后跨仓库依赖断裂，怎么回滚？', label: 'G3 跨仓依赖' },
+];
+let live = false;
 
-function render(qid) {
-  const d = DATA[qid];
-  let chainHtml;
-  if (d.graph) {
-    chainHtml = `<div class="graph">` +
-      d.repos.map((r, i) => {
-        const arr = i < d.repos.length - 1 ? '<div class="arrow">→</div>' : '';
-        return `<div class="repo ${r.impact ? 'impact' : ''}"><div class="r-name">${r.name}</div><div class="r-ver">${r.ver}</div><div class="r-mod">${r.mod}</div></div>${arr}`;
-      }).join('') + `</div>`;
-  } else {
-    chainHtml = `<div class="chain">` +
-      d.chain.map((h, i) => {
-        const arr = i < d.chain.length - 1 ? '<div class="arrow">→</div>' : '';
-        return `<div class="hop ev-${h.ev}"><div class="h-name">${h.name}</div><div class="h-role">${h.role}</div><div class="h-evidence">${h.text}</div></div>${arr}`;
-      }).join('') + `</div>`;
+const badge = document.getElementById('modeBadge');
+const presetBox = document.getElementById('presets');
+
+function renderPresets() {
+  presetBox.innerHTML = PRESETS.map((p, i) =>
+    `<div class="q" onclick="usePreset(${i})"><div class="num">${i + 1}</div><div><div class="qt">${p.label}</div><div class="ql">${p.q}</div></div></div>`
+  ).join('');
+}
+
+function usePreset(i) {
+  document.getElementById('qInput').value = PRESETS[i].q;
+  ask();
+}
+
+async function detectBackend() {
+  try {
+    const r = await fetch(API + '/health', { signal: AbortSignal.timeout(2000) });
+    if (r.ok) {
+      live = true;
+      badge.textContent = 'LIVE · 真实推理引擎已连接';
+      badge.className = 'badge live';
+    } else {
+      badge.textContent = 'STATIC · 合成演示数据';
+    }
+  } catch {
+    badge.textContent = 'STATIC · 合成演示数据';
   }
-  const stepsHtml = `<ol class="steps">` + d.steps.map((s, i) =>
-    `<li><div class="n">${i + 1}</div><div><div>${s.t}</div><div class="reason">${s.r}</div></div></li>`
-  ).join('') + `</ol>`;
+}
 
-  document.getElementById('result').innerHTML = `
-    <div class="result-head">
-      <div class="tag">${d.tag}</div>
-      <div class="input">${d.input}</div>
-    </div>
-    <div class="result-body">
-      <div class="section-label">Investigation path · 排查路径（涉及对象与关系）</div>
-      ${chainHtml}
-      ${d.foot ? `<div class="chain-foot">${d.foot}</div>` : ''}
-      <div class="section-label" style="margin-top:22px;">Evidence confidence · 证据可信度（4 档）</div>
+const LEVEL_META = { S4: ['s4', '源码'], S3: ['s3', '配置'], S2: ['s2', '推算'], S1: ['s1', '推测'] };
+
+async function ask() {
+  const question = document.getElementById('qInput').value.trim();
+  if (!question) return;
+  const btn = document.getElementById('qBtn');
+  btn.disabled = true;
+  render({ input: question, loading: true });
+  try {
+    if (live) {
+      const r = await fetch(API + '/query', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question, userId: 'demo' }),
+      });
+      if (!r.ok) throw new Error('API error ' + r.status);
+      const data = await r.json();
+      renderAnswer(question, data.answer);
+    } else {
+      // 回退：合成演示数据
+      const fake = { entities: [{ type: 'PathNode', name: '网关 → 服务 → 配置 → 缓存' }], investigationOrder: [{ reason: '按诊断规则包执行' }], evidence: [{ level: 'S3', scope: 'demo-data', detail: '合成演示：未连接后端，展示静态结果' }] };
+      renderAnswer(question, fake);
+    }
+  } catch (e) {
+    render({ input: question, error: '请求失败：' + e.message });
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+function renderAnswer(question, answer) {
+  const entities = answer.entities ?? [];
+  const order = answer.investigationOrder ?? [];
+  const evidence = answer.evidence ?? [];
+  const hasSpec = answer.hasSpeculation ?? false;
+
+  const entityChips = entities.length
+    ? entities.slice(0, 12).map((e) => `<span class="chip"><b>${e.name}</b><span class="t">${e.type}</span></span>`).join('')
+    : '<div style="color:var(--gray-600);font-size:12px">（知识库未命中实体）</div>';
+
+  const orderList = order.length
+    ? order.map((o, i) => `<li><div class="n">${i + 1}</div><div>${o.reason}</div></li>`).join('')
+    : '<div style="color:var(--gray-600);font-size:12px">（无排查路径）</div>';
+
+  const evList = evidence.map((ev) => {
+    const [cls, label] = LEVEL_META[ev.level] ?? ['s1', '推测'];
+    return `<div class="ev"><span class="lv ${cls}">${ev.level ?? 'S1'} ${label}</span><div><div class="scope">${ev.scope ?? ''}</div><div class="detail">${ev.detail ?? ''}</div></div></div>`;
+  }).join('');
+
+  const specWarn = hasSpec ? '<div class="error" style="margin-bottom:12px">⚠ 本答案含模型推测项（S1），已明示标注，请勿直接采信。</div>' : '';
+
+  render({
+    input: question,
+    html: `
+      ${specWarn}
+      <div class="section-label">Involved objects · 涉及对象</div>
+      <div class="entity-grid">${entityChips}</div>
+      <div class="section-label" style="margin-top:20px">Investigation order · 建议排查顺序</div>
+      <ol class="order">${orderList}</ol>
+      <div class="section-label" style="margin-top:20px">Evidence confidence · 证据可信度</div>
       <div class="legend">
         <span class="lg"><span class="dot s4"></span>S4 Source Code · 源码确认</span>
         <span class="lg"><span class="dot s3"></span>S3 Config · 配置证据</span>
         <span class="lg"><span class="dot s2"></span>S2 Derived · 推算</span>
-        <span class="lg"><span class="dot s1"></span>S1 Speculation · 推测（明示标注）</span>
+        <span class="lg"><span class="dot s1"></span>S1 Speculation · 推测</span>
       </div>
-      <div class="section-label" style="margin-top:22px;">Recommended order · 建议排查顺序</div>
-      ${stepsHtml}
-    </div>`;
+      <div class="evidence-list">${evList}</div>
+    `,
+  });
 }
 
-document.querySelectorAll('.q').forEach(el => {
-  el.addEventListener('click', () => {
-    document.querySelectorAll('.q').forEach(x => x.classList.remove('active'));
-    el.classList.add('active');
-    render(el.dataset.q);
-  });
-});
+function render({ input, html, loading, error }) {
+  let body;
+  if (loading) body = '<div class="loading">正在导航… 编排器检索知识图谱中</div>';
+  else if (error) body = `<div class="error">${error}</div>`;
+  else body = html;
+  document.getElementById('result').innerHTML = `
+    <div class="result-head"><div class="tag">Navigation Result</div><div class="input">${input}</div></div>
+    <div class="result-body">${body}</div>`;
+}
 
-render('q1');
+renderPresets();
+detectBackend();
 </script>
 </body>
 </html>
