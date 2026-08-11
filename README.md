@@ -9,6 +9,7 @@
 [![BUIDL_QUESTS 2026](https://img.shields.io/badge/BUIDL_QUESTS-2026-amber)](https://openarena.to/en/events/buidl-quests-2026)
 [![Track](https://img.shields.io/badge/Track-OPC%2FSuper%20Individuals-blueviolet)](https://openarena.to/en/events/buidl-quests-2026)
 [![License](https://img.shields.io/badge/License-MIT-green)](#)
+[![OpenArena](https://openarena.to/api/badge/cmsocbok2000004jugrlf392o)](https://openarena.to/zh/projects/cmsocbok2000004jugrlf392o)
 
 ---
 
