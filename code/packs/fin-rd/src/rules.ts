@@ -3,15 +3,7 @@
  * 痛点 → 排查路径映射（对齐 PDF §4.2 S1–S7 与沙盒 G1–G3）
  * 这是护城河所在：行业 know-how 写进规则，内核只负责执行
  */
-export interface DiagnosticRule {
-  id: string;
-  /** 触发关键词（问题分类时匹配） */
-  keywords: string[];
-  /** 排查路径：按顺序执行的检查步骤 */
-  steps: string[];
-  /** 关联黄金问题 */
-  goldQuestionId?: string;
-}
+import { DiagnosticRule } from '@epn/core';
 
 export const finRdRules: DiagnosticRule[] = [
   {
@@ -22,8 +14,8 @@ export const finRdRules: DiagnosticRule[] = [
   },
   {
     id: 'R2_credit_chain',
-    keywords: ['授信', '结果查询', '链路'],
-    steps: ['小程序页面 → 服务层 → 调度服务 → 每层节点(仓库/文件/函数/接口) → 证据逐跳'],
+    keywords: ['授信', '结果查询', '链路', '怎么走'],
+    steps: ['三层调用链：小程序页面 → 服务层 → 调度服务 → 每层节点(仓库/文件/函数/接口) → 证据逐跳'],
     goldQuestionId: 'S2',
   },
   {
@@ -40,7 +32,7 @@ export const finRdRules: DiagnosticRule[] = [
   },
   {
     id: 'G1_api_500',
-    keywords: ['500', '接口报错', '网关'],
+    keywords: ['500', '接口报错', '网关', '持续返回', '先查什么', '持续返回 500'],
     steps: ['调用链(网关→服务→DB→配置→缓存) → 每跳证据(日志/慢查询/开关/命中率) → 推荐排查顺序'],
     goldQuestionId: 'G1',
   },

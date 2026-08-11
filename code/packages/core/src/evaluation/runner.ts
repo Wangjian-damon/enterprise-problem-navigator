@@ -1,8 +1,9 @@
 /**
- * 评估框架骨架（P3 填充真实跑分）
- * 黄金问题集在 evaluation/黄金问题集_V1草稿.md；此 runner 将逐题调用 orchestrator 判定命中
+ * 评估框架（通用跑分器）：注入黄金问题 + 诊断规则，逐题判定首答命中
+ * 使用方（行业包）负责提供自己的 questions + rules
  */
-import { orchestrator } from '../orchestrator';
+import { Orchestrator } from '../orchestrator';
+import { DiagnosticRule } from '../diagnostic';
 
 export interface GoldQuestion {
   id: string;
@@ -11,31 +12,40 @@ export interface GoldQuestion {
   expected: string[];
 }
 
-/** V1 黄金问题集（正式版待作者校准后替换） */
-export const goldQuestions: GoldQuestion[] = [
-  { id: 'S1', question: '小程序提交后一直 loading，怎么排查？', expected: ['页面', '状态逻辑', 'API', '服务链路', 'loading关闭分支'] },
-  { id: 'S2', question: '授信结果查询从小程序到调度服务怎么走？', expected: ['三层调用链', '仓库/文件/函数', '接口证据'] },
-  { id: 'G1', question: '授信接口持续返回 500，先查什么？', expected: ['调用链', '慢查询', '配置开关', '缓存', '排查顺序'] },
-];
+export interface EvalOptions {
+  questions: GoldQuestion[];
+  rules: DiagnosticRule[];
+  orchestrator: Orchestrator;
+  /** 命中判定：需命中全部关键词（默认 true）还是 ≥ 比例 */
+  requireAll?: boolean;
+}
 
-export async function runEvaluation(): Promise<{ total: number; hit: number; pass: boolean }> {
+export interface EvalResult {
+  total: number;
+  hit: number;
+  missIds: string[];
+  pass: boolean;
+}
+
+export async function runEvaluation(opts: EvalOptions): Promise<EvalResult> {
+  const { questions, orchestrator, requireAll = true } = opts;
+  const missIds: string[] = [];
   let hit = 0;
-  for (const g of goldQuestions) {
+
+  for (const g of questions) {
     const { answer } = await orchestrator.handle({ question: g.question, userId: 'eval' });
     const joined = JSON.stringify(answer).toLowerCase();
     const matched = g.expected.filter((k) => joined.includes(k.toLowerCase()));
-    const isHit = matched.length === g.expected.length;
-    if (isHit) hit += 1;
+    const isHit = requireAll ? matched.length === g.expected.length : matched.length / g.expected.length >= 0.8;
+    if (isHit) {
+      hit += 1;
+    } else {
+      missIds.push(g.id);
+    }
     console.log(`[${isHit ? 'HIT' : 'MISS'}] ${g.id} ${g.question}（命中 ${matched.length}/${g.expected.length}）`);
   }
-  const pass = hit / goldQuestions.length >= 0.8;
-  console.log(`\n结果：${hit}/${goldQuestions.length}（目标 ≥80% → ${pass ? 'PASS' : 'FAIL'}）`);
-  return { total: goldQuestions.length, hit, pass };
-}
 
-if (require.main === module) {
-  runEvaluation().catch((e) => {
-    console.error(e);
-    process.exit(1);
-  });
+  const pass = hit / questions.length >= 0.8;
+  console.log(`\n结果：${hit}/${questions.length}（目标 ≥80% → ${pass ? 'PASS' : 'FAIL'}）`);
+  return { total: questions.length, hit, missIds, pass };
 }
