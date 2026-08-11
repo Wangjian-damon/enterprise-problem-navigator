@@ -1,0 +1,15 @@
+{
+  "name": "@epn/connector-sdk",
+  "version": "0.1.0",
+  "private": true,
+  "description": "EPN 连接器 SDK：connect / extract / sync / permissions（V1.5 预留，V1 先定义接口）",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@epn/core": "workspace:*"
+  }
+}

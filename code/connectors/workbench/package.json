@@ -1,0 +1,16 @@
+{
+  "name": "@epn/connector-workbench",
+  "version": "0.1.0",
+  "private": true,
+  "description": "EPN 配置工作台连接器（V1 使用：L1–L3 配置读取）",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@epn/core": "workspace:*",
+    "@epn/connector-sdk": "workspace:*"
+  }
+}

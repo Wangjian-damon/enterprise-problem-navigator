@@ -1,0 +1,17 @@
+{
+  "name": "@epn/pack-fin-rd",
+  "version": "0.1.0",
+  "private": true,
+  "description": "V1 金融研发包：实体/关系/规则包/黄金问题集（Pack-FinR&D）",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@epn/core": "workspace:*",
+    "@epn/connector-sdk": "workspace:*",
+    "@epn/shared": "workspace:*"
+  }
+}

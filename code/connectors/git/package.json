@@ -1,0 +1,16 @@
+{
+  "name": "@epn/connector-git",
+  "version": "0.1.0",
+  "private": true,
+  "description": "EPN git 仓库连接器（V1 使用：Tree-sitter 解析代码符号）",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@epn/core": "workspace:*",
+    "@epn/connector-sdk": "workspace:*"
+  }
+}

@@ -1,0 +1,22 @@
+# EPN 本地开发基础设施：PostgreSQL + pgvector
+# 用法：pnpm db:up / pnpm db:down（或 docker compose -f infra/docker-compose.yml up -d）
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: epn-postgres
+    environment:
+      POSTGRES_USER: epn
+      POSTGRES_PASSWORD: epn_dev_password
+      POSTGRES_DB: epn
+    ports:
+      - "5432:5432"
+    volumes:
+      - epn_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U epn"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  epn_pgdata:

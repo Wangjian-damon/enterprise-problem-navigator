@@ -1,0 +1,31 @@
+{
+  "name": "enterprise-problem-navigator",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Enterprise Internal Problem Diagnostic Navigation System · 企业内部问题诊断导航系统",
+  "workspaces": [
+    "apps/*",
+    "packages/*",
+    "packs/*",
+    "connectors/*"
+  ],
+  "scripts": {
+    "dev": "pnpm -r --parallel dev",
+    "dev:web": "pnpm --filter @epn/web dev",
+    "dev:api": "pnpm --filter @epn/api dev",
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "db:up": "docker compose -f infra/docker-compose.yml up -d",
+    "db:down": "docker compose -f infra/docker-compose.yml down",
+    "eval": "pnpm --filter @epn/core eval"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "typescript": "^5.5.0",
+    "@types/node": "^20.14.0"
+  },
+  "packageManager": "pnpm@9.0.0"
+}
