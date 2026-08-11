@@ -13,6 +13,7 @@
   "dependencies": {
     "@epn/core": "workspace:*",
     "@epn/connector-sdk": "workspace:*",
+    "@epn/connector-git": "workspace:*",
     "@epn/shared": "workspace:*"
   }
 }

@@ -25,9 +25,27 @@ export const finRdRules: DiagnosticRule[] = [
     goldQuestionId: 'S5',
   },
   {
+    id: 'S3_interface_landing',
+    keywords: ['在哪里调用', '落点', '进入哪个任务'],
+    steps: ['接口调用方列表 → 参数构造位置 → Load Server 入口 → 调度任务 → 结果映射'],
+    goldQuestionId: 'S3',
+  },
+  {
+    id: 'S4_error_code',
+    keywords: ['错误码', '在哪里定义', '返回'],
+    steps: ['错误码定义位置 → 产生位置 → 传递路径 → 前端解析 → 日志关键词'],
+    goldQuestionId: 'S4',
+  },
+  {
+    id: 'S6_config_control',
+    keywords: ['受哪些配置控制', '受哪些配置', '方法受'],
+    steps: ['直接配置 → 下游配置 → 配置键 → 默认值 → 工作台 → 作用域 → 影响分支'],
+    goldQuestionId: 'S6',
+  },
+  {
     id: 'R4_config_impact',
     keywords: ['配置', '关闭', '影响'],
-    steps: ['读取该配置的代码 → 接口 → 任务 → 页面 → 用户表现（反向影响链）'],
+    steps: ['读取代码 → 接口 → 任务 → 页面 → 用户表现（配置反向影响链）'],
     goldQuestionId: 'S7',
   },
   {

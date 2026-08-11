@@ -45,6 +45,9 @@ importers:
 
   packs/fin-rd:
     dependencies:
+      '@epn/connector-git':
+        specifier: workspace:*
+        version: link:../../connectors/git
       '@epn/connector-sdk':
         specifier: workspace:*
         version: link:../../packages/connector-sdk
