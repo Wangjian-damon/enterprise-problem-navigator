@@ -72,13 +72,70 @@
 | **Hallucination guards · 防幻觉** | Every claim requires a verifiable source reference; speculation is explicitly labeled / 每条断言必须有可验证的引用来源；推测明示标注 |
 | **Validation · 验证** | Validated on a synthetic sandbox mirroring real-world incident patterns. Being adopted internally (confidential). / 在模拟真实场景的合成沙盒上验证通过，正在公司内部落地（细节保密）。 |
 
-**Demo Preview · 演示预览** (video coming soon · 视频即将上线):
+**Demo Preview · 演示预览**:
 
 | Problem · 问题 | Navigation Output · 输出路径 |
 |---|---|
 | "Credit API keeps returning 500" | Chain: Gateway → Service → DB → Config → Cache. Evidence per hop. |
 | "New config not taking effect across all instances" | Config scope → rollout status → instance health check order |
 | "Cross-repo dependency breaking after upgrade" | Dependency graph → affected modules → recommended rollback order |
+
+**Live interactive demo** — deployed on GitHub Pages (static fallback) · 在线可交互演示（GitHub Pages 部署，静态兜底）:
+
+> 👉 **https://wangjian-damon.github.io/enterprise-problem-navigator/** — try the 5 preset problems or type your own. When the backend is connected, the badge shows **LIVE** and every answer carries real source-level evidence (`file:line`, S4 tier). 当后端已连接时，每条答案都带真实源码级证据（file:line，S4 档）。
+
+---
+
+## Quick Start · 本地启动
+
+> Monorepo (pnpm + TypeScript). In-memory knowledge base — **PostgreSQL/pgvector is scaffolded in `code/infra/` but not yet required**. 内存知识库即可运行；PostgreSQL/pgvector 已在 `code/infra/` 就绪但非必需。
+
+```bash
+# 1) 安装依赖（已配置 npmmirror 镜像可加速）
+cd code && pnpm install
+
+# 2) 构建全部包（core → connector → pack → api 按依赖拓扑）
+pnpm -r build
+
+# 3) 启动 API（端口 8091，自动索引 code/fixtures/demo-repo 合成示例仓库）
+node apps/api/dist/server.js
+#   → [epn-api] 索引完成 31 实体 / 33 关系
+#   → [epn-api] listening on http://localhost:8091
+
+# 4) 另开终端启动前端页（端口 8090）
+cd .. && python3 -m http.server 8090
+#   → 打开 http://localhost:8090/demo/index.html（自动探测后端 → LIVE 模式）
+```
+
+**Query API**:
+
+```bash
+curl -X POST http://localhost:8091/api/query \
+  -H "Content-Type: application/json" \
+  -d '{"question":"错误码 E1002 在哪里定义和返回？"}'
+```
+
+**Run the evaluation suite (10 gold questions) · 跑黄金问题评估**:
+
+```bash
+cd code && pnpm --filter @epn/pack-fin-rd eval
+# → 结果：10/10（目标 ≥80% → PASS）
+```
+
+---
+
+## Repository Layout · 仓库结构
+
+```
+code/
+├── apps/api/              # 轻量 HTTP 服务（P4 换 NestJS）
+├── packages/core/         # 水平内核：编排器 / 知识图谱 / 诊断规则契约 / 评估器
+├── packages/connector-sdk/ # 连接器契约（connect/extract/sync/permissions, L1-L4）
+├── packs/fin-rd/          # V1 金融研发包：实体/关系注册 + 诊断规则 + 黄金问题评估
+├── connectors/git/        # git 连接器（轻量源码解析，证据带 file:line）
+├── fixtures/demo-repo/    # 合成示例仓库（脱敏，模拟授信业务）
+└── infra/                 # PostgreSQL + pgvector (docker-compose)
+```
 
 ---
 
@@ -97,7 +154,11 @@
 |---|---|---|
 | 2026-08-05 | Core architecture finalized; repo launched / 核心架构确定，仓库上线 | ✅ |
 | 2026-08-05 | BUIDL_QUESTS 2026 submission (Track: OPC) | ✅ |
-| — | V1 Financial R&D pack MVP (synthetic sandbox) / 金融研发包 MVP | 🔄 In progress |
+| 2026-08-11 | Monorepo scaffolded; build pipeline green / monorepo 骨架 + 构建链路通过 | ✅ |
+| 2026-08-11 | Rule-driven orchestrator + evaluation runner / 规则驱动编排器 + 评估器 | ✅ |
+| 2026-08-11 | git connector + hybrid retrieval (S4 source-level evidence) / git 连接器 + 混合检索（S4 源码级证据） | ✅ |
+| 2026-08-11 | **Gold questions 10/10 PASS** / 黄金问题集 10 题全命中 | ✅ |
+| 2026-08-11 | Live interactive demo wired to real engine / 可交互 demo 接入真实推理引擎 | ✅ |
 | — | Demo video (2 min) / 2 分钟演示视频 | 📅 Planned |
 | — | Connector SDK first draft / 连接器 SDK 初版 | 📅 This month |
 | — | V2 Pharma pack kickoff / 药企包启动 | 📅 Q4 2026 |
