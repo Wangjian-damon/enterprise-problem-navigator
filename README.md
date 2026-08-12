@@ -10,6 +10,8 @@
 [![Track](https://img.shields.io/badge/Track-OPC%2FSuper%20Individuals-blueviolet)](https://openarena.to/en/events/buidl-quests-2026)
 [![License](https://img.shields.io/badge/License-MIT-green)](#)
 [![OpenArena](https://openarena.to/api/badge/cmsocbok2000004jugrlf392o)](https://openarena.to/zh/projects/cmsocbok2000004jugrlf392o)
+[![CI](https://github.com/Wangjian-damon/enterprise-problem-navigator/actions/workflows/ci.yml/badge.svg)](https://github.com/Wangjian-damon/enterprise-problem-navigator/actions/workflows/ci.yml)
+[![Gold Questions](https://img.shields.io/badge/Gold%20Questions-10%2F10%20PASS-teal)](https://github.com/Wangjian-damon/enterprise-problem-navigator)
 
 ---
 

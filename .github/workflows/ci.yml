@@ -1,0 +1,36 @@
+# EPN CI：每次 push/PR 自动构建全部包 + 跑黄金问题评估
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-eval:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - name: Install dependencies
+        run: cd code && pnpm install --frozen-lockfile
+
+      - name: Build all packages (topological)
+        run: cd code && pnpm -r build
+
+      - name: Typecheck
+        run: cd code && pnpm -r typecheck
+
+      - name: Run evaluation suite (10 gold questions)
+        run: cd code && pnpm --filter @epn/pack-fin-rd eval
